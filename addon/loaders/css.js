@@ -11,11 +11,20 @@ import { createLoadElement, nodeLoader } from './utilities';
  * cases, the Promise will always resolve successfully.
  *
  * @param {String} uri
+ * @param {String} reload
  * @return {Promise}
  */
-export default nodeLoader(function css(uri) {
+export default nodeLoader(function css(uri, reload) {
   return new RSVP.Promise((resolve, reject) => {
-    if (document.querySelector(`link[href="${uri}"]`)) {
+    let node = document.querySelector(`link[href="${uri}"]`);
+
+    // Force refreshing the script by deleting the DOM node.
+    if (node && reload) {
+      node.remove();
+      node = null;
+    }
+
+    if (node) {
       return resolve();
     }
 

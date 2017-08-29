@@ -41,7 +41,7 @@ export default Ember.Service.extend({
    */
   init() {
     this._super(...arguments);
-    
+
     this.__manifests = [];
     this._setupCache();
     this._initAssetLoaders();
@@ -126,7 +126,7 @@ export default Ember.Service.extend({
     }
 
     const loader = this._getAssetLoader(type);
-    const assetPromise = loader(uri);
+    const assetPromise = loader(uri, retryLoad === RETRY_LOAD_SECRET);
 
     const assetWithFail = assetPromise.then(
       () => ({ uri, type }),
