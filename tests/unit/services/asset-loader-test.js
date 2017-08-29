@@ -159,6 +159,29 @@ test('loadBundle() - retrying a load twice returns the same promise', function(a
   ).catch(noop);
 });
 
+test('loadAsset() - retrying load forces to reload the asset', function(assert) {
+  assert.expect(3);
+
+  const service = this.subject();
+  const asset = { type: 'test', uri: 'someuri' };
+
+  service.defineLoader('test', (uri, retry) => {
+    assert.notOk(retry);
+    return RSVP.reject('rejected');
+  });
+
+  return service.loadAsset(asset).catch((error) => {
+    service.defineLoader('test', (uri, retry) => {
+      assert.ok(retry);
+      return RSVP.resolve(uri);
+    });
+
+    return error.retryLoad().then((result) => {
+      assert.deepEqual(result, asset);
+    });
+  });
+});
+
 test('loadAsset() - throws an error if there is no loader defined for the asset type', function(assert) {
   const service = this.subject();
   const asset = { type: 'crazy-type', uri: 'someuri' };

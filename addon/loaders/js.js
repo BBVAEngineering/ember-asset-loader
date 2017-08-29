@@ -10,12 +10,12 @@ import { createLoadElement, nodeLoader } from './utilities';
  * @param {String} reload
  * @return {Promise}
  */
-export default nodeLoader(function js(uri, reload) {
+export default nodeLoader(function js(uri, retry) {
   return new RSVP.Promise((resolve, reject) => {
     let node = document.querySelector(`script[src="${uri}"]`);
 
     // Force refreshing the script by deleting the DOM node.
-    if (node && reload) {
+    if (node && retry) {
       node.remove();
       node = null;
     }
