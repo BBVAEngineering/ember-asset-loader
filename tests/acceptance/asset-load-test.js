@@ -79,9 +79,7 @@ test('visiting a route which fails to load an asset', function(assert) {
   andThen(function() {
     assert.equal(currentRouteName(), 'asset-error', 'transitioned ');
 
-    return waitFor(() => {
-      return !getScript() && !getLink();
-    })
+    return waitFor(() => !getScript() && !getLink())
       .catch((reason) => {
         assert.notOk(true, reason.message);
       })

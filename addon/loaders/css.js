@@ -21,7 +21,9 @@ export default nodeLoader(function css(uri) {
 
     // Try using the default onload/onerror handlers...
     const link = createLoadElement('link', resolve, function() {
-      document.head.removeChild(this);
+      if (document.head.contains(this)) {
+        document.head.removeChild(this);
+      }
       reject(...arguments);
     });
 
