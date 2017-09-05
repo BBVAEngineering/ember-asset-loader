@@ -21,10 +21,8 @@ export default nodeLoader(function css(uri) {
 
     // Try using the default onload/onerror handlers...
     const link = createLoadElement('link', resolve, function() {
-      try {
-        document.head.removeChild(this);
-      } catch (e) {
-        // Do nothing. Maybe removeChild has failed because the node not exists in DOM.
+      if (this.parentNode) {
+        this.parentNode.removeChild(this);
       }
       reject(...arguments);
     });
