@@ -16,8 +16,10 @@ export default nodeLoader(function js(uri) {
     }
 
     const script = createLoadElement('script', resolve, function() {
-      if (this.parentNode) {
-        this.parentNode.removeChild(this);
+      try {
+        document.head.removeChild(this);
+      } catch (e) {
+        // Do nothing. Maybe removeChild has failed because the node not exists in DOM.
       }
       reject(...arguments);
     });
